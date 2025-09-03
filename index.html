@@ -1,0 +1,824 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cassava AI Maturity Assessment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Bar with Logo and Navigation -->
+    <header class="main-header">
+        <div class="header-container">
+            <img src="CassavaAI_Blue.svg" alt="Cassava AI Logo" class="header-logo">
+            <nav class="header-nav">
+                <a href="#">Products</a>
+                <a href="#">Solutions</a>
+                <a href="#">AI Compute</a>
+                <a href="#">Resources</a>
+                <a href="#">About</a>
+            </nav>
+            <a href="#" class="header-contact-btn">Get in touch</a>
+        </div>
+    </header>
+
+    <!-- Landing Page -->
+    <div id="landingPage">
+        <div class="hero-banner">
+            <div class="hero-content">
+                <h1>Cassava AI Maturity Assessment</h1>
+                <p>Discover your organization's AI readiness and chart your path to AI excellence</p>
+            </div>
+        </div>
+        
+        <div class="assessment-intro">
+            <div class="container">
+                <h2>Transform Your Business with AI</h2>
+                <p>Being AI-ready requires combining five critical pillars - Strategy, Data, Technology, People, and Governance. This assessment tool helps companies understand their level of readiness across each of these pillars and provides customized recommendations for your AI journey.</p>
+                
+                <div class="user-form">
+                    <h3 style="margin-bottom: 2rem; color: #1a1a2e;">Tell us about your organization</h3>
+                    <form id="userInfoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Job Title *</label>
+                                <input type="text" id="title" name="title" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="company">Company *</label>
+                                <input type="text" id="company" name="company" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="industry">Industry *</label>
+                                <select id="industry" name="industry" required>
+                                    <option value="">Select your industry</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="financial">Financial Services</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="retail">Retail & E-commerce</option>
+                                    <option value="education">Education</option>
+                                    <option value="government">Government & Public Sector</option>
+                                    <option value="telecommunications">Telecommunications</option>
+                                    <option value="energy">Energy & Utilities</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button type="submit" class="btn">Start Assessment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Section -->
+    <div id="assessmentSection" class="hidden">
+        <div class="hero-banner" style="min-height: 200px;">
+            <div class="hero-content">
+                <h1>AI Maturity Assessment</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="progress-steps" id="progressSteps">
+                <div class="step active" data-step="1">1</div>
+                <div class="step" data-step="2">2</div>
+                <div class="step" data-step="3">3</div>
+                <div class="step" data-step="4">4</div>
+                <div class="step" data-step="5">5</div>
+            </div>
+            
+            <div id="questionSections"></div>
+            
+            <div class="navigation">
+                <button id="prevBtn" class="btn btn-secondary hidden">Previous</button>
+                <button id="nextBtn" class="btn">Next Section</button>
+                <button id="submitBtn" class="btn hidden">View Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="hidden">
+        <div class="hero-banner" style="min-height: 200px;">
+            <div class="hero-content">
+                <h1>Your AI Maturity Results</h1>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="results-dashboard">
+                <div class="results-header">
+                    <h2>Overall AI Maturity Score</h2>
+                    <div class="overall-score" id="overallScore">0.0</div>
+                    <div class="maturity-stage-result" id="maturityStage">Initial</div>
+                    <p>Based on your responses across all five dimensions</p>
+                </div>
+                
+                <div class="category-scores" id="categoryScores">
+                    <canvas id="categoryBarChart" width="700" height="400"></canvas>
+                </div>
+                
+                <div class="industry-comparison">
+                    <h3>Industry Comparison</h3>
+                    <p>How your organization compares to others in the <span id="userIndustry"></span> industry</p>
+                    <div class="comparison-chart" id="comparisonChart">
+                        Industry comparison visualization here
+                    </div>
+                </div>
+                
+                <div class="recommendations" id="recommendations">
+                    <h3>Key Recommendations</h3>
+                    <ul id="recommendationsList"></ul>
+                </div>
+                
+                <div class="export-options">
+                    <button class="btn" onclick="generatePDF()">Download Report</button>
+                    <button class="btn btn-secondary" onclick="shareResults()">Share Results</button>
+                    <button class="btn btn-secondary" onclick="restartAssessment()">Take Assessment Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Assessment data structure
+        const assessmentData = {
+            strategy: {
+                title: "Strategy",
+                description: "Strategy forms the backbone of AI readiness, emphasizing a well-defined approach, clear ownership, and sustainable financial planning.",
+                subcategories: {
+                    vision: [
+                        "Is there a clearly defined AI vision aligned with business goals?",
+                        "Has the AI vision been communicated across the organization?",
+                        "Is the AI vision supported by executive leadership?",
+                        "Does the AI vision include long-term strategic objectives?",
+                        "Is the AI vision reviewed and updated regularly?"
+                    ],
+                    roadmap: [
+                        "Is there a documented AI implementation roadmap?",
+                        "Are milestones and timelines defined for AI initiatives?",
+                        "Is the roadmap aligned with resource availability?",
+                        "Does the roadmap include risk mitigation strategies?",
+                        "Is the roadmap reviewed and adjusted periodically?"
+                    ]
+                }
+            },
+            data: {
+                title: "Data",
+                description: "Data availability and quality are fundamental to successful AI implementations and business value creation.",
+                subcategories: {
+                    availability: [
+                        "Is relevant data readily accessible for AI projects?",
+                        "Are data sources integrated across departments?",
+                        "Is there a centralized data repository?",
+                        "Are data access policies clearly defined?",
+                        "Is data availability monitored and improved over time?"
+                    ],
+                    quality: [
+                        "Is data regularly validated for accuracy?",
+                        "Are there processes for handling missing or inconsistent data?",
+                        "Is data quality measured using defined metrics?",
+                        "Are data cleansing tools and techniques used?",
+                        "Is there accountability for maintaining data quality?"
+                    ]
+                }
+            },
+            technology: {
+                title: "Technology",
+                description: "Technology infrastructure and tools provide the foundation for scalable and efficient AI implementations.",
+                subcategories: {
+                    infrastructure: [
+                        "Is there sufficient computing infrastructure for AI workloads?",
+                        "Are cloud or hybrid environments used for scalability?",
+                        "Is infrastructure monitored for performance and reliability?",
+                        "Are AI tools and platforms integrated into the infrastructure?",
+                        "Is infrastructure upgraded to meet evolving AI needs?"
+                    ],
+                    tools: [
+                        "Are modern AI development tools available to teams?",
+                        "Is there a standard toolset for AI development?",
+                        "Are tools evaluated and updated regularly?",
+                        "Are open-source and commercial tools both considered?",
+                        "Is tool usage supported by training and documentation?"
+                    ]
+                }
+            },
+            people: {
+                title: "People",
+                description: "People capabilities including skills development and organizational culture are critical for AI adoption success.",
+                subcategories: {
+                    skills: [
+                        "Do employees have access to AI training programs?",
+                        "Are AI skills assessed and tracked across teams?",
+                        "Is there a strategy to close AI skill gaps?",
+                        "Are AI roles clearly defined within the organization?",
+                        "Are external experts engaged when needed?"
+                    ],
+                    culture: [
+                        "Is there a culture of innovation supporting AI adoption?",
+                        "Are employees encouraged to experiment with AI solutions?",
+                        "Is AI adoption recognized and rewarded?",
+                        "Are cross-functional teams formed for AI projects?",
+                        "Is change management used to support AI initiatives?"
+                    ]
+                }
+            },
+            governance: {
+                title: "Governance",
+                description: "Governance ensures ethical, compliant, and responsible AI deployment across the organization.",
+                subcategories: {
+                    ethics: [
+                        "Are ethical guidelines established for AI use?",
+                        "Is there a process to assess AI bias and fairness?",
+                        "Are AI decisions explainable and transparent?",
+                        "Is ethical compliance monitored regularly?",
+                        "Are stakeholders involved in ethical reviews?"
+                    ],
+                    compliance: [
+                        "Are AI systems compliant with relevant regulations?",
+                        "Is data privacy ensured in AI applications?",
+                        "Are audit trails maintained for AI decisions?",
+                        "Is there a governance body overseeing AI compliance?",
+                        "Are compliance risks identified and mitigated?"
+                    ]
+                }
+            }
+        };
+
+        const maturityStages = {
+            1: { name: "Initial", recommendations: ["Define and communicate AI Strategy", "Establish foundational AI knowledge", "Build Data Capabilities", "Expand Analytics and AI skillsets", "Identify pilot projects, and secure executive sponsorship"] },
+            2: { name: "Emerging", recommendations: ["Develop AI use cases", "Invest in AI and Data Platforms", "Foster cross-functional collaboration", "Enhance Governance Structures"] },
+            3: { name: "Established", recommendations: ["Scale AI use cases", "Invest in talent development", "Formalize AI governance", "Drive AI and Data Infrastructure modernisation"] },
+            4: { name: "Advanced", recommendations: ["Increase wide AI adoption in business functions", "Improve AI scalability and Lifecycle Management", "Optimize AI operations", "Drive innovation through AI", "Continuously monitor performance and ethics"] },
+            5: { name: "Leading", recommendations: ["Embed AI across the organisation", "Share best practices and influence industry standards", "Explore cutting-edge AI technologies", "Pursue AI ecosystem partnerships", "Create monetisable AI products and technologies"] }
+        };
+
+        // State management
+        let currentStep = 1;
+        let userInfo = {};
+        let responses = {};
+        let totalSteps = Object.keys(assessmentData).length;
+        let categoryBarChart = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userInfoForm').addEventListener('submit', handleUserInfoSubmit);
+            document.getElementById('nextBtn').addEventListener('click', nextStep);
+            document.getElementById('prevBtn').addEventListener('click', prevStep);
+            document.getElementById('submitBtn').addEventListener('click', showResults);
+            
+            generateQuestionSections();
+        });
+
+        function handleUserInfoSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            userInfo = Object.fromEntries(formData);
+            
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('assessmentSection').classList.remove('hidden');
+            
+            showCurrentStep();
+        }
+
+        function generateQuestionSections() {
+            const container = document.getElementById('questionSections');
+            let stepIndex = 1;
+            
+            Object.keys(assessmentData).forEach(categoryKey => {
+                const category = assessmentData[categoryKey];
+                const section = document.createElement('div');
+                section.className = 'question-section hidden';
+                section.id = `step${stepIndex}`;
+                
+                let questionsHTML = '';
+                let questionIndex = 0;
+                
+                Object.keys(category.subcategories).forEach(subCategoryKey => {
+                    category.subcategories[subCategoryKey].forEach(question => {
+                        questionsHTML += `
+                            <div class="question">
+                                <h3>${question}</h3>
+                                <div class="rating-scale">
+                                    ${generateRatingOptions(categoryKey, questionIndex)}
+                                </div>
+                            </div>
+                        `;
+                        questionIndex++;
+                    });
+                });
+                
+                section.innerHTML = `
+                    <h2>${category.title}</h2>
+                    <p>${category.description}</p>
+                    ${questionsHTML}
+                `;
+                
+                container.appendChild(section);
+                stepIndex++;
+            });
+        }
+
+        function generateRatingOptions(category, questionIndex) {
+            const labels = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
+            let html = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                html += `
+                    <label class="rating-option">
+                        <input type="radio" name="${category}_${questionIndex}" value="${i}" onchange="handleResponse('${category}', ${questionIndex}, ${i})">
+                        <div class="rating-circle">${i}</div>
+                        <div class="rating-label">${labels[i-1]}</div>
+                    </label>
+                `;
+            }
+            
+            return html;
+        }
+
+        function handleResponse(category, questionIndex, value) {
+            if (!responses[category]) {
+                responses[category] = {};
+            }
+            responses[category][questionIndex] = parseInt(value);
+            updateNavigationButtons();
+        }
+
+        function showCurrentStep() {
+            document.querySelectorAll('.question-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            const currentSection = document.getElementById(`step${currentStep}`);
+            if (currentSection) {
+                currentSection.classList.remove('hidden');
+            }
+            
+            updateProgress();
+            updateStepIndicators();
+            updateNavigationButtons();
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateStepIndicators() {
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (currentStep > 1) {
+                prevBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+            }
+            
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+
+            const currentCategoryKey = Object.keys(assessmentData)[currentStep - 1];
+            const currentCategoryResponses = responses[currentCategoryKey];
+            const totalQuestionsInCategory = getTotalQuestionsInCategory(currentCategoryKey);
+
+            document.querySelectorAll(`#step${currentStep} .question`).forEach(q => {
+                q.style.boxShadow = '';
+                q.style.border = '';
+            });
+            const prevPrompt = document.getElementById('answerPrompt');
+            if (prevPrompt) prevPrompt.remove();
+
+            nextBtn.disabled = false;
+            submitBtn.disabled = false;
+        }
+
+        function getTotalQuestionsInCategory(categoryKey) {
+            const category = assessmentData[categoryKey];
+            let total = 0;
+            Object.keys(category.subcategories).forEach(subCategoryKey => {
+                total += category.subcategories[subCategoryKey].length;
+            });
+            return total;
+        }
+
+        function nextStep() {
+            const currentCategoryKey = Object.keys(assessmentData)[currentStep - 1];
+            const currentCategoryResponses = responses[currentCategoryKey] || {};
+            const totalQuestionsInCategory = getTotalQuestionsInCategory(currentCategoryKey);
+            let unanswered = [];
+            
+            document.querySelectorAll(`#step${currentStep} .question`).forEach((q, idx) => {
+                if (!(idx in currentCategoryResponses)) {
+                    unanswered.push(q);
+                }
+            });
+            
+            if (unanswered.length > 0) {
+                unanswered.forEach(q => {
+                    q.style.boxShadow = '0 0 0 2px #ffb3b3';
+                    q.style.border = '1.5px solid #ffb3b3';
+                });
+                
+                if (!document.getElementById('answerPrompt')) {
+                    const prompt = document.createElement('div');
+                    prompt.id = 'answerPrompt';
+                    prompt.textContent = 'Please answer all questions before proceeding';
+                    prompt.style.color = '#b30000';
+                    prompt.style.background = '#fff0f0';
+                    prompt.style.padding = '0.75rem 1.5rem';
+                    prompt.style.borderRadius = '8px';
+                    prompt.style.textAlign = 'center';
+                    prompt.style.margin = '1rem auto';
+                    prompt.style.fontWeight = '600';
+                    const section = document.getElementById(`step${currentStep}`);
+                    section.insertBefore(prompt, section.firstChild);
+                }
+                
+                unanswered[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showCurrentStep();
+                const section = document.getElementById('assessmentSection');
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showCurrentStep();
+                const section = document.getElementById('assessmentSection');
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        function calculateCategoryScore(categoryKey) {
+            const categoryResponses = responses[categoryKey];
+            if (!categoryResponses) return 0;
+            
+            const values = Object.values(categoryResponses);
+            return values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
+        }
+
+        function calculateOverallScore() {
+            const categoryScores = Object.keys(assessmentData).map(key => calculateCategoryScore(key));
+            return categoryScores.reduce((sum, score) => sum + score, 0) / categoryScores.length;
+        }
+
+        function getMaturityStage(score) {
+            if (score >= 4.5) return 5;
+            if (score >= 3.5) return 4;
+            if (score >= 2.5) return 3;
+            if (score >= 1.5) return 2;
+            return 1;
+        }
+
+        function generateComparisonChartHTML(orgScore, avgScore) {
+            return `
+                <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div style="margin-bottom:1rem; font-size:1.1rem;">Your Organization: <span style='color:#00F19C; font-weight:bold;'>${orgScore.toFixed(1)}</span></div>
+                    <div style="margin-bottom:1rem; font-size:1.1rem;">Average Organization: <span style='color:#001D58; font-weight:bold;'>${avgScore.toFixed(1)}</span></div>
+                    <div style="width:80%; display:flex; gap:1rem; justify-content:center; align-items:center;">
+                        <div style="flex:1;">
+                            <div style="font-size:0.95rem; margin-bottom:0.25rem; color:#00F19C; font-weight:600;">Your Organization</div>
+                            <div style="height:20px; background:#e9ecef; border-radius:10px; position:relative;">
+                                <div style="height:100%; width:${(orgScore/5)*100}%; background:#00F19C; border-radius:10px;"></div>
+                            </div>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:0.95rem; margin-bottom:0.25rem; color:#001D58; font-weight:600;">Average Organization</div>
+                            <div style="height:20px; background:#e9ecef; border-radius:10px; position:relative;">
+                                <div style="height:100%; width:${(avgScore/5)*100}%; background:#001D58; border-radius:10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showResults() {
+            
+            const overallScore = calculateOverallScore();
+            const maturityStageNumber = getMaturityStage(overallScore);
+            const maturityStage = maturityStages[maturityStageNumber];
+            
+            document.getElementById('assessmentSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            document.getElementById('overallScore').textContent = overallScore.toFixed(1);
+            document.getElementById('maturityStage').textContent = maturityStage.name;
+            document.getElementById('userIndustry').textContent = userInfo.industry;
+
+            // Clear and recreate category scores section
+            const categoryScoresContainer = document.getElementById('categoryScores');
+            categoryScoresContainer.innerHTML = '<canvas id="categoryBarChart" width="700" height="400"></canvas>';
+
+            // Create the bar chart
+            const ctx = document.getElementById('categoryBarChart').getContext('2d');
+            const categoryScores = Object.keys(assessmentData).map(key => calculateCategoryScore(key));
+            
+            if (categoryBarChart) {
+                categoryBarChart.destroy();
+            }
+            
+            categoryBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Strategy', 'Data', 'Technology', 'People', 'Governance'],
+                    datasets: [{
+                        label: 'AI Maturity Score',
+                        data: categoryScores,
+                        backgroundColor: [
+                            '#005B82',
+                            '#FFD43B', 
+                            '#198754',
+                            '#FF7F3F',
+                            '#7C2D8B'
+                        ],
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        barPercentage: 0.7,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'AI Maturity Scores by Category',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 0,
+                            max: 5,
+                            grid: { color: '#e9ecef' },
+                            ticks: { font: { size: 14 } }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: 16 } }
+                        }
+                    }
+                }
+            });
+
+            // Update comparison chart
+            const comparisonChart = document.getElementById('comparisonChart');
+            const dummyOrgScore = 3.2;
+            comparisonChart.innerHTML = generateComparisonChartHTML(overallScore, dummyOrgScore);
+
+            // Add classification details
+            const resultsHeader = document.querySelector('.results-header');
+            let classificationTitle = '';
+            let classificationDesc = '';
+            
+            switch (maturityStage.name) {
+                case 'Initial':
+                    classificationTitle = 'Initial';
+                    classificationDesc = 'Limited AI strategy with ad-hoc capabilities and basic understanding of AI potential';
+                    break;
+                case 'Emerging':
+                    classificationTitle = 'Emerging';
+                    classificationDesc = 'AI strategy developed with isolated use cases lacking strategic alignment';
+                    break;
+                case 'Established':
+                    classificationTitle = 'Established';
+                    classificationDesc = 'AI integrated into business processes with measurable outcomes and maturing governance';
+                    break;
+                case 'Advanced':
+                    classificationTitle = 'Advanced';
+                    classificationDesc = 'AI as core business strategy with significant impact and strong leadership';
+                    break;
+                case 'Leading':
+                    classificationTitle = 'Leading';
+                    classificationDesc = 'AI competitive differentiator with enterprise-wide innovation and industry recognition';
+                    break;
+            }
+            
+            const classificationDetails = `
+                <div style="background:#00F19C; color:#001D58; border-radius:16px; padding:2rem 1.5rem; margin:2rem auto; max-width:700px; box-shadow:0 2px 16px rgba(0,8,47,0.08); display:flex; flex-direction:column; align-items:center;">
+                    <h3 style="color:#001D58; font-size:1.5rem; font-weight:700; margin-bottom:0.5rem;">${classificationTitle}</h3>
+                    <p style="font-size:1.1rem; text-align:center; margin:0; color:#001D58; font-weight:500;">${classificationDesc}</p>
+                </div>
+            `;
+            resultsHeader.insertAdjacentHTML('beforeend', classificationDetails);
+
+            // Generate recommendations
+            const recommendationsList = document.getElementById('recommendationsList');
+            recommendationsList.innerHTML = '';
+
+            maturityStage.recommendations.forEach(recommendation => {
+                const li = document.createElement('li');
+                li.textContent = recommendation;
+                recommendationsList.appendChild(li);
+            });
+
+            storeAnalytics();
+            Upload_Results();
+        }
+
+        function storeAnalytics() {
+            const results = {
+                userInfo: userInfo,
+                responses: responses,
+                overallScore: calculateOverallScore(),
+                maturityStage: getMaturityStage(calculateOverallScore()),
+                categoryScores: Object.keys(assessmentData).reduce((scores, key) => {
+                    scores[key] = calculateCategoryScore(key);
+                    return scores;
+                }, {}),
+                timestamp: new Date().toISOString()
+            };
+            
+            if (!window.assessmentAnalytics) {
+                window.assessmentAnalytics = [];
+            }
+            window.assessmentAnalytics.push(results);
+            
+            console.log('Assessment results stored:', results);
+        }
+
+        function generatePDF() {
+            const overallScore = calculateOverallScore();
+            const maturityStageNumber = getMaturityStage(overallScore);
+            const maturityStage = maturityStages[maturityStageNumber];
+            
+            const reportContent = `
+AI MATURITY ASSESSMENT REPORT
+
+Organization: ${userInfo.company}
+Contact: ${userInfo.name} (${userInfo.title})
+Email: ${userInfo.email}
+Industry: ${userInfo.industry}
+Date: ${new Date().toLocaleDateString()}
+
+OVERALL RESULTS:
+Overall AI Maturity Score: ${overallScore.toFixed(1)}/5.0
+Maturity Stage: ${maturityStage.name}
+
+CATEGORY BREAKDOWN:
+${Object.keys(assessmentData).map(key => `${assessmentData[key].title}: ${calculateCategoryScore(key).toFixed(1)}/5.0`).join('\n')}
+
+KEY RECOMMENDATIONS:
+${maturityStage.recommendations.map(rec => `• ${rec}`).join('\n')}
+
+---
+This assessment was conducted using Cassava AI's comprehensive maturity framework.
+For more information about AI strategy and implementation, contact Cassava AI.
+            `;
+            
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${userInfo.company}_AI_Maturity_Report.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+
+
+        // To upload results, use AJAX to send data to a PHP endpoint (e.g., upload_results.php)
+        function Upload_Results() {
+            const data = {
+                Organization: userInfo.company,
+                Contact_Person: userInfo.name,
+                Contact_Person_role: userInfo.title,
+                Email: userInfo.email,
+                Industry: userInfo.industry,
+                Date: new Date().toLocaleDateString(),
+                Overall_Score: calculateOverallScore().toFixed(1),
+                Maturity_Stage: maturityStages[getMaturityStage(calculateOverallScore())].name,
+                Strategy: calculateCategoryScore('strategy').toFixed(1),
+                Data: calculateCategoryScore('data').toFixed(1),
+                Technology: calculateCategoryScore('technology').toFixed(1),
+                People: calculateCategoryScore('people').toFixed(1),
+                Governance: calculateCategoryScore('governance').toFixed(1),
+                Recommendations: maturityStages[getMaturityStage(calculateOverallScore())].recommendations.join('\n')
+            };
+
+            fetch('upload_results.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Results uploaded:', result);
+            })
+            .catch(error => {
+                console.error('Error uploading results:', error);
+            });
+        }
+
+
+        function shareResults() {
+            const overallScore = calculateOverallScore();
+            const maturityStageNumber = getMaturityStage(overallScore);
+            const maturityStage = maturityStages[maturityStageNumber];
+            
+            const shareText = `🚀 Just completed the Cassava AI Maturity Assessment! Our organization scored ${overallScore.toFixed(1)}/5.0 and achieved "${maturityStage.name}" maturity level. Ready to transform our business with AI! #AI #DigitalTransformation #CassavaAI`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AI Maturity Assessment Results',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Results copied to clipboard! Share on your preferred platform.');
+                });
+            }
+        }
+
+        function restartAssessment() {
+            currentStep = 1;
+            userInfo = {};
+            responses = {};
+            
+            document.getElementById('userInfoForm').reset();
+            
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            if (categoryBarChart) {
+                categoryBarChart.destroy();
+                categoryBarChart = null;
+            }
+            
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('assessmentSection').classList.add('hidden');
+            document.getElementById('landingPage').classList.remove('hidden');
+        }
+
+        function getIndustryAverage(industry) {
+            const industryAverages = {
+                'technology': 3.8,
+                'financial': 3.2,
+                'healthcare': 2.9,
+                'manufacturing': 2.7,
+                'retail': 3.1,
+                'education': 2.4,
+                'government': 2.2,
+                'telecommunications': 3.5,
+                'energy': 2.8,
+                'other': 2.9
+            };
+            
+            return industryAverages[industry] || 2.9;
+        }
+    </script>
+</body>
+</html>
+
